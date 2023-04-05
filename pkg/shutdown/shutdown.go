@@ -55,8 +55,8 @@ type GracefuleShutdown struct {
 
 func New() *GracefuleShutdown {
 	return &GracefuleShutdown{
-		callbacks: make([]ShutdownCallback, 10),
-		managers:  make([]ShutdownManager, 3),
+		callbacks: make([]ShutdownCallback, 0, 10),
+		managers:  make([]ShutdownManager, 0, 3),
 	}
 }
 
@@ -95,6 +95,8 @@ func (gs *GracefuleShutdown) StartShutdown(sm ShutdownManager) {
 			gs.ReportError(callback.OnShutdown(sm.GetName()))
 		}(callback)
 	}
+
+	wg.Wait()
 
 	// 执行关闭服务完成之后的操作
 	gs.ReportError(sm.PostShutdown())
