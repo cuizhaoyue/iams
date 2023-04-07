@@ -454,6 +454,9 @@ func (l *zapLogger) Fatalw(msg string, keysAndValues ...interface{}) {
 	l.zapLogger.Sugar().Fatalw(msg, keysAndValues...)
 }
 
+func L(ctx context.Context) *zapLogger {
+	return std.L(ctx)
+}
 func (l *zapLogger) L(ctx context.Context) *zapLogger {
 	lg := l.clone()
 
