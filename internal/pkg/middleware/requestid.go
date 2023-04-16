@@ -52,7 +52,7 @@ func GetLoggerConfig(
 	}
 }
 
-// GetDefaultLogFormatterWithRequestID 返回带有'RequestID' 的gin.LogFormatter.
+// GetDefaultLogFormatterWithRequestID 返回gin.LogFormatter 实例.
 func GetDefaultLogFormatterWithRequestID() gin.LogFormatter {
 	return func(param gin.LogFormatterParams) string {
 		var statusColor, methodColor, resetColor string

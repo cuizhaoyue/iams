@@ -23,9 +23,10 @@ type Config struct {
 	Jwt             *JwtInfo
 	Mode            string
 	Middlewares     []string
-	Healthz         bool
-	EnableProfile   bool
-	EnableMetrics   bool
+
+	Healthz       bool
+	EnableProfile bool
+	EnableMetrics bool
 }
 
 // SecureServingInfo 保存tls服务的配置.

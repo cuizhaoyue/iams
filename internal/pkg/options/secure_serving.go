@@ -2,6 +2,7 @@ package options
 
 import (
 	"fmt"
+	"path"
 
 	"github.com/cuizhaoyue/iams/internal/pkg/server"
 
@@ -112,4 +113,26 @@ func (o *SecureServingOptions) AddFlags(fs *pflag.FlagSet) {
 		""+
 			"File containing the default x509 private key matching --secure.tls.cert-key.cert-file.",
 	)
+}
+
+// Complete 填充任何必要但是没有设置的字段.
+func (o *SecureServingOptions) Complete() error {
+	if o == nil || o.BindPort == 0 {
+		return nil
+	}
+
+	keyCert := &o.ServerCert.CertKey
+	if keyCert.CertFile != "" || keyCert.KeyFile != "" {
+		return nil
+	}
+
+	if o.ServerCert.CertDirectory != "" {
+		if o.ServerCert.PairName == "" {
+			return fmt.Errorf("--secure.tls.pair-name is required if --secure.tls.cert-dir is set")
+		}
+		keyCert.CertFile = path.Join(o.ServerCert.CertDirectory, o.ServerCert.PairName+".crt")
+		keyCert.KeyFile = path.Join(o.ServerCert.CertDirectory, o.ServerCert.PairName+".key")
+	}
+
+	return nil
 }

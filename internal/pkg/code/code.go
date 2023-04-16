@@ -25,24 +25,24 @@ type ErrCode struct {
 var _ errors.Coder = &ErrCode{}
 
 // Code returns the integer code of ErrCode.
-func (coder ErrCode) Code() int {
+func (coder *ErrCode) Code() int {
 	return coder.C
 }
 
 // String implements stringer. String returns the external error message,
 // if any.
-func (coder ErrCode) String() string {
+func (coder *ErrCode) String() string {
 	return coder.Ext
 }
 
 // Reference returns the reference document.
-func (coder ErrCode) Reference() string {
+func (coder *ErrCode) Reference() string {
 	return coder.Ref
 }
 
 // HTTPStatus returns the associated HTTP status code, if any. Otherwise,
 // returns 200.
-func (coder ErrCode) HTTPStatus() int {
+func (coder *ErrCode) HTTPStatus() int {
 	if coder.HTTP == 0 {
 		return http.StatusInternalServerError
 	}
@@ -70,4 +70,35 @@ func register(code int, httpStatus int, message string, refs ...string) {
 	}
 
 	errors.MustRegister(coder)
+}
+
+// init register error codes defines in this source code to `github.com/marmotedu/errors`
+func init() {
+	register(ErrUserNotFound, 404, "User not found")
+	register(ErrUserAlreadyExist, 400, "User already exist")
+	register(ErrReachMaxCount, 400, "Secret reach the max count")
+	register(ErrSecretNotFound, 404, "Secret not found")
+	register(ErrPolicyNotFound, 404, "Policy not found")
+	register(ErrSuccess, 200, "OK")
+	register(ErrUnknown, 500, "Internal server error")
+	register(ErrBind, 400, "Error occurred while binding the request body to the struct")
+	register(ErrValidation, 400, "Validation failed")
+	register(ErrTokenInvalid, 401, "Token invalid")
+	register(ErrPageNotFound, 404, "Page not found")
+	register(ErrDatabase, 500, "Database error")
+	register(ErrEncrypt, 401, "Error occurred while encrypting the user password")
+	register(ErrSignatureInvalid, 401, "Signature is invalid")
+	register(ErrExpired, 401, "Token expired")
+	register(ErrInvalidAuthHeader, 401, "Invalid authorization header")
+	register(ErrMissingHeader, 401, "The `Authorization` header was empty")
+	register(ErrPasswordIncorrect, 401, "Password was incorrect")
+	register(ErrPermissionDenied, 403, "Permission denied")
+	register(ErrEncodingFailed, 500, "Encoding failed due to an error with the data")
+	register(ErrDecodingFailed, 500, "Decoding failed due to an error with the data")
+	register(ErrInvalidJSON, 500, "Data is not valid JSON")
+	register(ErrEncodingJSON, 500, "JSON data could not be encoded")
+	register(ErrDecodingJSON, 500, "JSON data could not be decoded")
+	register(ErrInvalidYaml, 500, "Data is not valid Yaml")
+	register(ErrEncodingYaml, 500, "Yaml data could not be encoded")
+	register(ErrDecodingYaml, 500, "Yaml data could not be decoded")
 }
