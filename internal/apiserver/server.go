@@ -220,6 +220,7 @@ func (c *completedExtraConfig) New() (*grpcAPIServer, error) {
 	}
 
 	pb.RegisterCacheServer(grpcServer, cacheIns)
+
 	reflection.Register(grpcServer)
 
 	return &grpcAPIServer{grpcServer, c.Addr}, nil
