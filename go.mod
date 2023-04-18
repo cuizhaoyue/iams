@@ -3,6 +3,7 @@ module github.com/cuizhaoyue/iams
 go 1.20
 
 require (
+	github.com/AlekSi/pointer v1.2.0
 	github.com/cuizhaoyue/toolkit v0.0.3
 	github.com/fatih/color v1.15.0
 	github.com/gin-contrib/cors v1.4.0
@@ -11,11 +12,12 @@ require (
 	github.com/marmotedu/api v1.6.3
 	github.com/marmotedu/component-base v1.6.2
 	github.com/marmotedu/errors v1.0.2
+	github.com/marmotedu/iam v1.7.0
 	github.com/marmotedu/log v0.0.1
 	github.com/mattn/go-isatty v0.0.17
 	github.com/novalagung/gubrak v1.0.0
 	github.com/redis/go-redis/v9 v9.0.3
-	github.com/satori/go.uuid v1.2.0
+	github.com/satori/go.uuid v1.2.1-0.20181028125025-b2ce2384e17b
 	github.com/spf13/cobra v1.6.1
 	github.com/spf13/pflag v1.0.5
 	github.com/spf13/viper v1.15.0
@@ -30,7 +32,7 @@ require (
 )
 
 require (
-	github.com/Azure/go-ansiterm v0.0.0-20170929234023-d6e3b3328b78 // indirect
+	github.com/Azure/go-ansiterm v0.0.0-20210617225240-d185dfc1b5a1 // indirect
 	github.com/asaskevich/govalidator v0.0.0-20210307081110-f21760c49a8d // indirect
 	github.com/beorn7/perks v1.0.1 // indirect
 	github.com/bytedance/sonic v1.8.0 // indirect
@@ -47,6 +49,7 @@ require (
 	github.com/go-playground/validator/v10 v10.11.2 // indirect
 	github.com/go-sql-driver/mysql v1.7.0 // indirect
 	github.com/goccy/go-json v0.10.0 // indirect
+	github.com/golang/mock v1.6.0 // indirect
 	github.com/golang/protobuf v1.5.2 // indirect
 	github.com/google/uuid v1.3.0 // indirect
 	github.com/gosuri/uitable v0.0.4 // indirect
@@ -61,9 +64,9 @@ require (
 	github.com/magiconair/properties v1.8.7 // indirect
 	github.com/mattn/go-colorable v0.1.13 // indirect
 	github.com/mattn/go-runewidth v0.0.10 // indirect
-	github.com/matttproud/golang_protobuf_extensions v1.0.1 // indirect
+	github.com/matttproud/golang_protobuf_extensions v1.0.2-0.20181231171920-c182affec369 // indirect
 	github.com/mitchellh/mapstructure v1.5.0 // indirect
-	github.com/moby/term v0.0.0-20201216013528-df9cb8a40635 // indirect
+	github.com/moby/term v0.0.0-20210619224110-3f7ff695adc6 // indirect
 	github.com/modern-go/concurrent v0.0.0-20180306012644-bacd9c7ef1dd // indirect
 	github.com/modern-go/reflect2 v1.0.2 // indirect
 	github.com/ory/ladon v1.2.0 // indirect

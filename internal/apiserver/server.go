@@ -4,6 +4,11 @@ import (
 	"context"
 	"fmt"
 
+	pb "github.com/marmotedu/api/proto/apiserver/v1"
+	"google.golang.org/grpc/reflection"
+
+	"github.com/cuizhaoyue/iams/internal/apiserver/controller/v1/cache"
+
 	"github.com/cuizhaoyue/iams/internal/apiserver/store"
 	"github.com/cuizhaoyue/iams/internal/apiserver/store/mysql"
 
@@ -25,9 +30,9 @@ import (
 // apiserver应用配置
 type apiServer struct {
 	genericAPIServer *genericapiserver.GenericAPIServer // 通用api服务
-	// gRPCAPIServer    *grpcAPIServer                     // grpc服务
-	gs           *shutdown.GracefuleShutdown  // 负责服务优雅关闭
-	redisOptions *genericoptions.RedisOptions // redis配置选项
+	gRPCAPIServer    *grpcAPIServer                     // grpc服务
+	gs               *shutdown.GracefuleShutdown        // 负责服务优雅关闭
+	redisOptions     *genericoptions.RedisOptions       // redis配置选项
 }
 
 // 准备好的apiserver服务
@@ -45,7 +50,7 @@ func createAPIServer(cfg *config.Config) (*apiServer, error) {
 		return nil, err
 	}
 
-	// extraConfig, err := buildExtraConfig(cfg)
+	extraConfig, err := buildExtraConfig(cfg)
 	if err != nil {
 		return nil, err
 	}
@@ -56,16 +61,16 @@ func createAPIServer(cfg *config.Config) (*apiServer, error) {
 		return nil, err
 	}
 
-	// extraServer, err := extraConfig.complete().New()
-	// if err != nil {
-	// 	return nil, err
-	// }
+	extraServer, err := extraConfig.complete().New()
+	if err != nil {
+		return nil, err
+	}
 
 	server := &apiServer{
 		genericAPIServer: genericServer,
-		// gRPCAPIServer:    extraServer,
-		gs:           gs,
-		redisOptions: cfg.RedisOptions,
+		gRPCAPIServer:    extraServer,
+		gs:               gs,
+		redisOptions:     cfg.RedisOptions,
 	}
 
 	return server, nil
@@ -87,7 +92,7 @@ func (s *apiServer) PrepareRun() preparedAPIServer {
 			_ = mysqlStore.Close()
 		}
 		// 关闭grpc服务和通用apiserver服务.
-		// s.gRPCAPIServer.Close()
+		s.gRPCAPIServer.Close()
 		s.genericAPIServer.Close()
 
 		return nil
@@ -99,7 +104,7 @@ func (s *apiServer) PrepareRun() preparedAPIServer {
 // Run 运行通用服务
 func (s preparedAPIServer) Run() error {
 	// 运行grpc服务
-	// go s.gRPCAPIServer.Run()
+	go s.gRPCAPIServer.Run()
 
 	// 启动shutdown manager
 	if err := s.gs.Start(); err != nil {
@@ -206,9 +211,16 @@ func (c *completedExtraConfig) New() (*grpcAPIServer, error) {
 	opts := []grpc.ServerOption{grpc.MaxRecvMsgSize(c.MaxMsgSize), grpc.Creds(creds)}
 	grpcServer := grpc.NewServer(opts...)
 
-	// TODO: 需要向grpc服务中注册需要的服务
+	// 注册缓存服务到grpc服务
 	mysqlStore, _ := mysql.GetMySQLFactoryOr(c.mysqlOptions)
 	store.SetClient(mysqlStore)
+	cacheIns, err := cache.GetCacheInsOr(mysqlStore)
+	if err != nil {
+		log.Fatalf("Failed to get cache instance: %s", err.Error())
+	}
+
+	pb.RegisterCacheServer(grpcServer, cacheIns)
+	reflection.Register(grpcServer)
 
 	return &grpcAPIServer{grpcServer, c.Addr}, nil
 }

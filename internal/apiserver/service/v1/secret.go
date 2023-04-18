@@ -3,6 +3,9 @@ package v1
 import (
 	"context"
 
+	"github.com/cuizhaoyue/iams/internal/pkg/code"
+	"github.com/marmotedu/errors"
+
 	"github.com/cuizhaoyue/iams/internal/apiserver/store"
 
 	v1 "github.com/marmotedu/api/apiserver/v1"
@@ -29,18 +32,27 @@ func newSecrets(srv *service) *secretService {
 	return &secretService{srv.store}
 }
 func (s *secretService) Create(ctx context.Context, secret *v1.Secret, opts metav1.CreateOptions) error {
-	// TODO implement me
-	panic("implement me")
+	if err := s.store.Secrets().Create(ctx, secret, opts); err != nil {
+		return errors.WithCode(code.ErrDatabase, err.Error())
+	}
+
+	return nil
 }
 
 func (s *secretService) Update(ctx context.Context, secret *v1.Secret, opts metav1.UpdateOptions) error {
-	// TODO implement me
-	panic("implement me")
+	if err := s.store.Secrets().Update(ctx, secret, opts); err != nil {
+		return errors.WithCode(code.ErrDatabase, err.Error())
+	}
+
+	return nil
 }
 
 func (s *secretService) Delete(ctx context.Context, username, secretID string, opts metav1.DeleteOptions) error {
-	// TODO implement me
-	panic("implement me")
+	if err := s.store.Secrets().Delete(ctx, username, secretID, opts); err != nil {
+		return err
+	}
+
+	return nil
 }
 
 func (s *secretService) DeleteCollection(
@@ -49,16 +61,27 @@ func (s *secretService) DeleteCollection(
 	secretIDs []string,
 	opts metav1.DeleteOptions,
 ) error {
-	// TODO implement me
-	panic("implement me")
+	if err := s.store.Secrets().DeleteCollection(ctx, username, secretIDs, opts); err != nil {
+		return errors.WithCode(code.ErrDatabase, err.Error())
+	}
+
+	return nil
 }
 
 func (s *secretService) Get(ctx context.Context, username, secretID string, opts metav1.GetOptions) (*v1.Secret, error) {
-	// TODO implement me
-	panic("implement me")
+	secret, err := s.store.Secrets().Get(ctx, username, secretID, opts)
+	if err != nil {
+		return nil, err
+	}
+
+	return secret, nil
 }
 
 func (s *secretService) List(ctx context.Context, username string, opts metav1.ListOptions) (*v1.SecretList, error) {
-	// TODO implement me
-	panic("implement me")
+	secrets, err := s.store.Secrets().List(ctx, username, opts)
+	if err != nil {
+		return nil, errors.WithCode(code.ErrDatabase, err.Error())
+	}
+
+	return secrets, nil
 }

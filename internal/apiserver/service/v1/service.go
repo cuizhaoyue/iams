@@ -5,7 +5,7 @@ import "github.com/cuizhaoyue/iams/internal/apiserver/store"
 // Service 定义返回资源数据的函数
 type Service interface {
 	Users() UserSrv
-	Secret() SecretSrv
+	Secrets() SecretSrv
 	Policies() PolicySrv
 }
 
@@ -23,7 +23,7 @@ func (s *service) Users() UserSrv {
 	return newUser(s)
 }
 
-func (s *service) Secret() SecretSrv {
+func (s *service) Secrets() SecretSrv {
 	return newSecrets(s)
 }
 

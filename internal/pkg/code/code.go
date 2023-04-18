@@ -76,8 +76,8 @@ func register(code int, httpStatus int, message string, refs ...string) {
 func init() {
 	register(ErrUserNotFound, 404, "User not found")
 	register(ErrUserAlreadyExist, 400, "User already exist")
-	register(ErrReachMaxCount, 400, "Secret reach the max count")
-	register(ErrSecretNotFound, 404, "Secret not found")
+	register(ErrReachMaxCount, 400, "Secrets reach the max count")
+	register(ErrSecretNotFound, 404, "Secrets not found")
 	register(ErrPolicyNotFound, 404, "Policy not found")
 	register(ErrSuccess, 200, "OK")
 	register(ErrUnknown, 500, "Internal server error")

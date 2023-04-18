@@ -13,10 +13,10 @@ const (
 
 // iam-apiserver: secret errors.
 const (
-	// ErrReachMaxCount - 400: Secret reach the max count.
+	// ErrReachMaxCount - 400: Secrets reach the max count.
 	ErrReachMaxCount int = iota + 110101
 
-	// ErrSecretNotFound - 404: Secret not found.
+	// ErrSecretNotFound - 404: Secrets not found.
 	ErrSecretNotFound
 )
 

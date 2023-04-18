@@ -23,7 +23,7 @@ func (ds *datastore) Users() store.UserStore {
 	return newUsers(ds)
 }
 
-func (ds *datastore) Secret() store.SecretStore {
+func (ds *datastore) Secrets() store.SecretStore {
 	return newSecrets(ds)
 }
 

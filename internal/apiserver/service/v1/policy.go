@@ -70,11 +70,19 @@ func (s *policyService) DeleteCollection(
 }
 
 func (s *policyService) Get(ctx context.Context, username string, name string, opts metav1.GetOptions) (*v1.Policy, error) {
-	// TODO implement me
-	panic("implement me")
+	policy, err := s.store.Polices().Get(ctx, username, name, opts)
+	if err != nil {
+		return nil, err
+	}
+
+	return policy, nil
 }
 
 func (s *policyService) List(ctx context.Context, username string, opts metav1.ListOptions) (*v1.PolicyList, error) {
-	// TODO implement me
-	panic("implement me")
+	policies, err := s.store.Polices().List(ctx, username, opts)
+	if err != nil {
+		return nil, errors.WithCode(code.ErrDatabase, err.Error())
+	}
+
+	return policies, nil
 }

@@ -1,10 +1,9 @@
 package docs
 
 import (
+	"github.com/cuizhaoyue/iams/internal/apiserver/controller/v1/user"
 	v1 "github.com/marmotedu/api/apiserver/v1"
 	metav1 "github.com/marmotedu/component-base/pkg/meta/v1"
-
-	"github.com/marmotedu/iam/internal/apiserver/controller/v1/user"
 )
 
 // swagger:route POST /users users createUserRequest
